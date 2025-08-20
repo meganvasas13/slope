@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slope & Intercept Visualizer</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin: 40px; }
+    label, input { margin: 0 5px; }
+    canvas { border: 1px solid #333; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h2>Slope & Intercept Visualizer</h2>
+  <form id="lineForm" onsubmit="return false;">
+    <label for="slope">Slope (m):</label>
+    <input type="number" id="slope" value="1" step="any">
+    <label for="intercept">Intercept (b):</label>
+    <input type="number" id="intercept" value="0" step="any">
+    <button onclick="drawLine()">Plot Line</button>
+  </form>
+  <canvas id="plot" width="400" height="400"></canvas>
+  <script>
+    function drawLine() {
+      const m = parseFloat(document.getElementById('slope').value);
+      const b = parseFloat(document.getElementById('intercept').value);
+      const canvas = document.getElementById('plot');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Draw axes
+      ctx.strokeStyle = '#aaa';
+      ctx.beginPath();
+      ctx.moveTo(0, 200); ctx.lineTo(400, 200); // x-axis
+      ctx.moveTo(200, 0); ctx.lineTo(200, 400); // y-axis
+      ctx.stroke();
+      // Draw line y = mx + b
+      ctx.strokeStyle = '#0074D9';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      // x from -10 to 10
+      for (let x = -10; x <= 10; x += 0.1) {
+        let px = 200 + x * 20; // scale x
+        let y = m * x + b;
+        let py = 200 - y * 20; // scale y
+        if (x === -10) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+      // Draw labels
+      ctx.fillStyle = '#333';
+      ctx.font = '12px sans-serif';
+      ctx.fillText('x', 390, 215);
+      ctx.fillText('y', 215, 15);
+      ctx.fillText('Origin', 205, 215);
+    }
+    // Initial plot
+    drawLine();
+  </script>
+</body>
+</html>
